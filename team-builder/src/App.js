@@ -3,7 +3,7 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import TeamMember from './components/TeamMember';
 import TeamMemberForm from './components/TeamMemberForm';
-import axios from 'axios';
+import axios from './axios';
 
 const initialValues = {
   name: "",
@@ -17,7 +17,7 @@ function App() {
   //step 1. we need state to hold all values of the form
   const [formValue, setFormValue] = useState(initialValues);
   const updateForm = (inputName, inputValue) => {
-    const newFormValue = {...formValue, [inputName]: inputValue}
+    const newFormValue = {...formValue, [inputName]: inputValue};
     setFormValue(newFormValue);
   }
   const submitForm = () => {
@@ -26,6 +26,11 @@ function App() {
       email: formValue.email.trim(),
       role: formValue.role
     }
+    const nameIsEmpty = !newMember.name;
+    const emailIsEmpty = !newMember.email;
+    const roleIsEmpty = !newMember.role;
+    if (nameIsEmpty || emailIsEmpty || roleIsEmpty) return;
+
     axios
       .post('fakeapi.com', newMember)
       .then(res => {
